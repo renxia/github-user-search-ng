@@ -1,0 +1,132 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <form class="well">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Enter GitHub Username..."
+                    [(ngModel)]="username" name="username"
+                    (ngModelChange)="searchUser()">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row recommend-user-list">
+        <div class="col-md-12">
+            <button type="button"
+              [disabled]="isLoading"
+              class="btn btn-primary btn-sm"
+              *ngFor="let userName of userList;"
+              (click)="setUserName(userName)">{{userName}}</button>
+        </div>
+    </div>
+
+    <div *ngIf="user">
+        <div class="card">
+            <div class="card-header">
+                <h4>{{user.name}}</h4>
+            </div>
+            <div class="card-block">
+                <div class="row">
+                    <div class="col-md-3">
+                        <img class="card-img-top" [src]="user.avatar_url" />
+                        <a class="btn btn-primary btn-block view-profile" target="_blank" [href]="user.html_url">View Profile</a>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="stats">
+                            <a target="_blank" [href]="user.html_url + '?tab=repositories'">
+                              <button type="button" class="btn btn-primary">
+                                  Public Repos <span class="badge badge-light">{{user.public_repos}}</span>
+                              </button>
+                            </a>
+                            <button type="button" class="btn btn-info">
+                                Public Gists <span class="badge badge-light">{{user.public_gists}}</span>
+                            </button>
+                            <a target="_blank" [href]="user.html_url + '?tab=followers'">
+                              <button type="button" class="btn btn-success">
+                                  Followers <span class="badge badge-light">{{user.followers}}</span>
+                              </button>
+                            </a>
+                            <a target="_blank" [href]="user.html_url + '?tab=following'">
+                              <button type="button" class="btn btn-dark">
+                                  Following <span class="badge badge-light">{{user.following}}</span>
+                              </button>
+                            </a>
+                        </div>
+
+                        <ul class="list-group">
+                            <li class="list-group-item"><strong>Username</strong> {{user.login}}</li>
+                            <li class="list-group-item"><strong>Location</strong> {{user.location}}</li>
+                            <li class="list-group-item"><strong>Email</strong> {{user.email}}</li>
+                            <li class="list-group-item"><strong>Blog</strong><a target="_blank" [href]="user.blog"> {{user.blog}}</a></li>
+                            <li class="list-group-item"><strong>Member Since</strong> {{user.created_at | date}}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                User Repositories ({{user.public_repos}})
+            </div>
+            <div class="card-body">
+                <div class="alert alert-secondary" *ngFor="let repo of repos; let idx=index;">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <a target="_blank" [href]="repo.html_url" [title]="repo.full_name"><h4>{{idx+1}}. {{repo.name}}</h4></a>
+                            <p>{{repo.description}}</p>
+                        </div>
+                        <div class="col-md-4 op-btn-list">
+                            <a target="_blank" [href]="repo.html_url + '/stargazers'" title="Stars">
+                              <button type="button" class="btn btn-success btn-sm">
+                                  Stars <span class="badge badge-light">{{repo.stargazers_count}}</span>
+                              </button>
+                            </a>
+
+                            <a target="_blank" [href]="repo.html_url + '/network/members'" title="Fork">
+                              <button type="button" class="btn btn-info btn-sm">
+                                  Forks <span class="badge badge-light">{{repo.forks}}</span>
+                              </button>
+                            </a>
+
+                            <a target="_blank" [href]="repo.html_url + '/issues'" title="Open Issues">
+                              <button type="button" class="btn btn-danger btn-sm">
+                                  Issues <span class="badge badge-light">{{repo.open_issues}}</span>
+                              </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-toolbar pagination" role="toolbar" aria-label="Toolbar with button groups">
+                    <div class="page-size">
+                        <select class="form-control form-control-sm" [(ngModel)]="pager.pageSize" (ngModelChange)="getReoByPage(1)">
+                            <option>10</option>
+                            <option>30</option>
+                            <option>50</option>
+                            <option>100</option>
+                        </select>
+                    </div>
+                    <div class="btn-group" role="group" aria-label="First group">
+                      <button type="button"
+                        [class.btn-success]="pager.curPage === i+1"
+                        class="btn btn-secondary"
+                        [disabled]="isLoading"
+                        (click)="getReoByPage(i+1)"
+                        *ngFor="let i of pageList;">{{ i + 1 }}</button>
+                    </div>
+                  </div>
+              </div>
+        </div>
+    </div>
+</div>
+
+<div class="tips-container" *ngIf="msgTip">
+    <div class="alert alert-{{tipType}} alert-dismissible fade show" role="alert">
+      {{msgTip}}
+      <button type="button" class="close" (click)="msgTip=''">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+</div>
