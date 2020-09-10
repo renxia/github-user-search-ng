@@ -42,3 +42,6 @@ testem.log
 Thumbs.db
 
 simple-mock-config.js
+
+package-lock.json
+yarn.lock
