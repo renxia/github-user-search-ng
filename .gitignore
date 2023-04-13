@@ -45,3 +45,5 @@ simple-mock-config.js
 
 package-lock.json
 yarn.lock
+
+simple-mock-config.*
