@@ -30,7 +30,7 @@ export class GithubService {
       });
   }
 
-  getRepositories(params) {
+  getRepositories(params: Record<string, string | number>) {
     return this._http.get(this.baseUrl + this.username + '/repos', {
       params: {
         client_id: this.client_id,
@@ -44,7 +44,7 @@ export class GithubService {
     });
   }
 
-  updateUser(username) {
+  updateUser(username: string) {
      this.username = (username + '').trim();
      return this;
   }

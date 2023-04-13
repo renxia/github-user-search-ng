@@ -20,7 +20,7 @@ export class ProfileComponent implements OnInit {
   ];
 
   get pageList() {
-    const page = [];
+    const page: number[] = [];
 
     if (!this.user) {
       return page;
@@ -40,17 +40,16 @@ export class ProfileComponent implements OnInit {
     pageSize: 50,
   };
 
-  tipTimer;
-  tipType;
+  tipTimer: number;
+  tipType: 'success' | 'warning' | 'danger' | 'info';
   msgTip = '';
 
   constructor(private _githubService: GithubService) {
     this.user = false;
     this.searchUser();
-    window['profileComp'] = this;
   }
 
-  searchUserTimer;
+  searchUserTimer: number;
   searchUser() {
     if (this.isLoading) {
       return;
@@ -59,7 +58,7 @@ export class ProfileComponent implements OnInit {
     const username = this.username;
 
     clearTimeout(this.searchUserTimer);
-    this.searchUserTimer = setTimeout(() => {
+    this.searchUserTimer = window.setTimeout(() => {
       this._githubService
         .updateUser(this.username)
         .getUser()
@@ -74,12 +73,12 @@ export class ProfileComponent implements OnInit {
     }, 300);
   }
 
-  setUserName(name) {
+  setUserName(name: string) {
     this.username = name;
     this.searchUser();
   }
 
-  getReoByPage(page) {
+  getReoByPage(page: number) {
     if (this.isLoading) {
       return;
     }
@@ -103,12 +102,12 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  showTips(err, type: 'success' | 'warning' | 'danger' | 'info' = 'success') {
+  showTips(err: string, type: 'success' | 'warning' | 'danger' | 'info' = 'success') {
     this.msgTip = err || '';
     this.tipType = type;
 
     clearTimeout(this.tipTimer);
-    this.tipTimer = setTimeout(() => this.msgTip = '', 4500);
+    this.tipTimer = window.setTimeout(() => this.msgTip = '', 4500);
   }
 
   ngOnInit() {}
